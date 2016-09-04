@@ -205,7 +205,7 @@ func LoadFromReader(in io.Reader) (c *ConfigFile, err error) {
 }
 
 func (c *ConfigFile) loadFile(fileName string) (err error) {
-	f, err := os.Open(fileName)
+	f, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_SYNC, 0)
 	if err != nil {
 		return err
 	}
