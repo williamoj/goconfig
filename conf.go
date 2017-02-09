@@ -160,6 +160,11 @@ func (c *ConfigFile) DeleteKey(section, key string) bool {
 		section = DEFAULT_SECTION
 	}
 
+	if c.BlockMode {
+		c.lock.Lock()
+		defer c.lock.Unlock()
+	}
+
 	// Check if section exists.
 	if _, ok := c.data[section]; !ok {
 		return false
@@ -594,6 +599,11 @@ func (c *ConfigFile) GetKeyList(section string) []string {
 		section = DEFAULT_SECTION
 	}
 
+	if c.BlockMode {
+		c.lock.RLock()
+		defer c.lock.RUnlock()
+	}
+
 	// Check if section exists.
 	if _, ok := c.data[section]; !ok {
 		return nil
@@ -616,6 +626,11 @@ func (c *ConfigFile) DeleteSection(section string) bool {
 	// Blank section name represents DEFAULT section.
 	if len(section) == 0 {
 		section = DEFAULT_SECTION
+	}
+
+	if c.BlockMode {
+		c.lock.Lock()
+		defer c.lock.Unlock()
 	}
 
 	// Check if section exists.
@@ -646,6 +661,11 @@ func (c *ConfigFile) GetSection(section string) (map[string]string, error) {
 	// Blank section name represents DEFAULT section.
 	if len(section) == 0 {
 		section = DEFAULT_SECTION
+	}
+
+	if c.BlockMode {
+		c.lock.Lock()
+		defer c.lock.Unlock()
 	}
 
 	// Check if section exists.
